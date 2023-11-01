@@ -1,0 +1,39 @@
+#Pretty command line
+export PS1="\[\e[38;5;226m\]\u\[\e[38;5;220m\]@\[\e[38;5;214m\]\h \[\e[38;5;33m\]\w \[\033[0m\]$ "
+
+#Helpful Aliases
+alias ls='ls -aF --color=al'
+alias ll='ls -al'
+alias drush='php vendor/drush/drush/drush.php'
+
+#Turn off the stupid bell
+bind 'set bell-style none'
+
+#Colorize manpages
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+#Expand shell history to 10k lines
+export HISTFILESIZE=20000
+export HISTSIZE=10000
+shopt -s histappend
+shopt -s cmdhist
+HISTCONTROL=ignoredups
+export HISTIGNORE="&:ls:[bf]g:exit"
+
+#FAWK THIS THING!
+# usage: command | fawk 2 (prints the second field)
+function fawk {
+    first="awk '{print "
+    last="}'"
+    cmd="${first}\$${1}${last}"
+    eval $cmd
+}
+
+#Tail all logs in /var/log (with sudo)
+alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs sudo tail -f"
